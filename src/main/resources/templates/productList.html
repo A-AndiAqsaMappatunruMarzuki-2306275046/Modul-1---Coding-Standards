@@ -16,14 +16,29 @@
     <tr>
       <th scope="col">Product Name</th>
       <th scope="col">Quantity</th>
+      <th scope="col">Action</th>
     </tr>
     </thead>
+
     <tbody>
     <tr th:each="product: ${products}">
       <td th:text="${product.productName}"></td>
       <td th:text="${product.productQuantity}"></td>
+      <td>
+        <a class="btn btn-warning btn-sm"
+           th:href="@{/product/edit/{id}(id=${product.productId})}">
+          Edit
+        </a>
+
+        <a class="btn btn-danger btn-sm"
+           th:href="@{/product/delete/{id}(id=${product.productId})}"
+           onclick="return confirm('Yakin mau hapus product ini?');">
+          Delete
+        </a>
+      </td>
     </tr>
     </tbody>
+
   </table>
 </div>
 
