@@ -29,6 +29,11 @@
            th:href="@{/product/edit/{id}(id=${product.productId})}">
           Edit
         </a>
+        <a class="btn btn-danger btn-sm"
+           th:href="@{/product/delete/{id}(id=${product.productId})}"
+           onclick="return confirm('Yakin mau hapus product ini?');">
+          Delete
+        </a>
       </td>
     </tr>
     </tbody>
