@@ -29,7 +29,7 @@ public class ProductRepository {
         return null;
     }
 
-    public Product update(Product updatedProduct) {
+    public Product edit(Product updatedProduct) {
         for (int i = 0; i < productData.size(); i++) {
             Product current = productData.get(i);
             if (current.getProductId().equals(updatedProduct.getProductId())) {
@@ -40,7 +40,7 @@ public class ProductRepository {
         return null;
     }
 
-    public boolean deleteById(String id) {
+    public boolean delete(String id) {
         return productData.removeIf(p -> p.getProductId().equals(id));
     }
 }
