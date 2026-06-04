@@ -19,6 +19,7 @@ class ProductRepositoryTest {
 
     @BeforeEach
     void setUp() {
+        // Metode ini sengaja dikosongkan karena inisialisasi dilakukan secara spesifik di setiap test case
     }
 
     @Test

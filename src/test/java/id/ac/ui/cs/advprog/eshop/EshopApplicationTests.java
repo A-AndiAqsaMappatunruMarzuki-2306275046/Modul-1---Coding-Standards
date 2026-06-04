@@ -8,6 +8,7 @@ class EshopApplicationTests {
 
     @Test
     void contextLoads() {
+        // Metode ini sengaja dibiarkan kosong untuk menguji apakah Spring Context berhasil dimuat.
     }
 
 }

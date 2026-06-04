@@ -50,3 +50,20 @@ public abstract class BaseFunctionalTest {
         baseUrl = String.format("%s:%d", testBaseUrl, serverPort);
     }
 }
+```
+
+## 4.2 Reflection
+
+**1. List the code quality issue(s) that you fixed during the exercise and explain your strategy on fixing them.**
+
+Selama mengerjakan latihan ini, saya memperbaiki beberapa isu kualitas kode yang dideteksi oleh SonarCloud:
+* **Duplicated String Literal (`ProductController.java`):** SonarCloud mendeteksi penggunaan *string* `"redirect:/product/list"` yang diketik ulang sebanyak tiga kali. Strategi perbaikannya adalah menerapkan prinsip *Clean Code* dengan mengekstrak *string* tersebut ke dalam satu variabel konstanta (`private static final String`). Hal ini mempermudah pemeliharaan (*maintainability*) jika sewaktu-waktu URL perlu diubah, serta mencegah risiko salah ketik (*typo*).
+* **Empty Methods (`EshopApplicationTests.java` dan `ProductRepositoryTest.java`):** SonarCloud menandai metode kosong seperti `contextLoads()` dan `setUp()` sebagai *Code Smell* karena niat pembuat kode menjadi tidak jelas. Strategi untuk memperbaikinya adalah dengan menambahkan komentar bersarang (*nested comment*) di dalam blok metode tersebut yang menjelaskan secara eksplisit bahwa metode itu memang sengaja dikosongkan (misalnya untuk sekadar menguji proses *loading Spring Context*).
+
+**2. Look at your CI/CD workflows (GitHub)/pipelines (GitLab). Do you think the current implementation has met the definition of Continuous Integration and Continuous Deployment? Explain the reasons.**
+
+Ya, implementasi *workflow* pada repositori ini sudah memenuhi definisi *Continuous Integration* (CI) dan *Continuous Deployment* (CD).
+
+CI telah tercapai karena setiap kali ada kode baru yang di-*push* atau di-*merge* ke dalam *branch*, GitHub Actions akan secara otomatis menjalankan seluruh rangkaian *unit test* (beserta JaCoCo) dan memindai kualitas kode menggunakan SonarCloud untuk mencegah *bug* atau penurunan kualitas masuk ke repositori utama.
+
+Sementara itu, CD juga telah terwujud melalui integrasi antara *branch* `main` dan layanan PaaS, di mana setiap perubahan kode di *branch* utama akan secara otomatis memicu proses *build container* Docker dan meluncurkan pembaruan aplikasi ke server tanpa memerlukan intervensi manual sama sekali.
