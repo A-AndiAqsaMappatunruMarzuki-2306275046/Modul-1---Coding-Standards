@@ -132,4 +132,36 @@ class ProductRepositoryTest {
         Iterator<Product> productIterator = productRepository.findAll();
         assertTrue(productIterator.hasNext());
     }
+
+    @Test
+    void testFindByIdPositive() {
+        Product product = new Product();
+        product.setProductId("product-1");
+        product.setProductName("Laptop");
+        product.setProductQuantity(10);
+
+        productRepository.create(product);
+
+        Product foundProduct = productRepository.findById("product-1");
+
+        assertNotNull(foundProduct);
+        assertEquals("product-1", foundProduct.getProductId());
+        assertEquals("Laptop", foundProduct.getProductName());
+        assertEquals(10, foundProduct.getProductQuantity());
+    }
+
+    @Test
+    void testFindByIdNegative() {
+        Product product = new Product();
+        product.setProductId("product-1");
+        product.setProductName("Laptop");
+        product.setProductQuantity(10);
+
+        productRepository.create(product);
+
+        Product foundProduct = productRepository.findById("unknown-id");
+
+        assertNull(foundProduct);
+    }
+
 }
