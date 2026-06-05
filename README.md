@@ -84,3 +84,26 @@ Yes, the Interface Segregation Principle (ISP) is applied. The `CarService` inte
 
 **5. Have you implemented DIP?**
 Yes, I applied the Dependency Inversion Principle (DIP). Previously, the `CarController` depended on a concrete, low-level module: `@Autowired private CarServiceImpl carservice`. I changed this to depend on the high-level abstraction: `@Autowired private CarService carservice`. Now, the controller relies on the abstraction rather than the implementation detail.
+
+
+## Reflection
+
+**1) Explain what principles you apply to your project!**
+
+In this project, I applied several SOLID principles to refactor the initial, tightly-coupled code:
+* **Single Responsibility Principle (SRP):** I extracted `CarController` from the `ProductController.java` file and placed it in its own file. Now, `ProductController` only handles product-related HTTP requests, and `CarController` only handles car-related requests.
+* **Liskov Substitution Principle (LSP):** I removed the `extends ProductController` inheritance from the `CarController` class. A `CarController` is not a logical substitute for a `ProductController`, so inheriting from it was a structural mistake.
+* **Dependency Inversion Principle (DIP):** In the `CarController`, I changed the injected dependency from the concrete implementation (`CarServiceImpl`) to its abstraction (`CarService` interface).
+* **Open-Closed Principle (OCP):** By relying on the `CarService` interface, the controller is now open for extension (e.g., adding a new database service implementation) but closed for modification.
+
+**2) Explain the advantages of applying SOLID principles to your project with examples.**
+
+Applying SOLID principles makes the codebase much easier to maintain, scale, and test:
+* **Improved Maintainability & Readability (SRP Example):** By separating `CarController` and `ProductController`, I prevent the creation of a "God Class." If a bug occurs in the car editing feature, I know exactly where to look (`CarController.java`) without having to sift through hundreds of lines of irrelevant product logic.
+* **High Flexibility & Loose Coupling (DIP & OCP Example):** Because `CarController` depends on the `CarService` interface, I can easily swap out the underlying data storage in the future. If I want to upgrade from using an in-memory list to a real PostgreSQL database, I simply create a new class (e.g., `CarServiceDbImpl`) that implements `CarService`. I won't need to change a single line of code inside the `CarController`.
+
+**3) Explain the disadvantages of not applying SOLID principles to your project with examples.**
+
+Failing to apply SOLID principles leads to a rigid, fragile, and error-prone system:
+* **Unexpected Bugs & Side Effects (LSP Violation Example):** When `CarController` was extending `ProductController`, it silently inherited all product-related endpoints. This means a user navigating to a car-related path might accidentally trigger a product-related action, causing routing conflicts and potential security flaws.
+* **Testing Difficulties & Tight Coupling (DIP Violation Example):** When `CarController` directly depended on the concrete `CarServiceImpl`, the two classes were tightly coupled. When I tried to run unit tests for the `ProductController`, the application context crashed because it was trying to load the tightly-coupled `CarServiceImpl` dependency that wasn't mocked. This makes isolated unit testing incredibly frustrating and difficult.
