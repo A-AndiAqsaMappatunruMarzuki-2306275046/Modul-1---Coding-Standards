@@ -70,6 +70,9 @@ class CarController extends ProductController {
     @Autowired
     private CarServiceImpl carservice;
 
+    // Penambahan konstanta untuk memperbaiki isu duplikasi string
+    private static final String REDIRECT_LIST_CAR = "redirect:listCar";
+
     @GetMapping("/createCar")
     public String createCarPage(Model model) {
         Car car = new Car();
@@ -80,7 +83,7 @@ class CarController extends ProductController {
     @PostMapping("/createCar")
     public String createCarPost(@ModelAttribute Car car, Model model) {
         carservice.create(car);
-        return "redirect:listCar";
+        return REDIRECT_LIST_CAR;
     }
 
     @GetMapping("/listCar")
@@ -99,14 +102,14 @@ class CarController extends ProductController {
 
     @PostMapping("/editCar")
     public String editCarPost(@ModelAttribute Car car, Model model) {
-        System.out.println(car.getCarId());
+        // System.out.println telah dihapus dari sini
         carservice.update(car.getCarId(), car);
-        return "redirect:listCar";
+        return REDIRECT_LIST_CAR;
     }
 
     @PostMapping("/deleteCar")
     public String deleteCar(@RequestParam("carId") String carId) {
         carservice.deleteCarById(carId);
-        return "redirect:listCar";
+        return REDIRECT_LIST_CAR;
     }
 }
