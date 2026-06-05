@@ -67,3 +67,20 @@ Ya, implementasi *workflow* pada repositori ini sudah memenuhi definisi *Continu
 CI telah tercapai karena setiap kali ada kode baru yang di-*push* atau di-*merge* ke dalam *branch*, GitHub Actions akan secara otomatis menjalankan seluruh rangkaian *unit test* (beserta JaCoCo) dan memindai kualitas kode menggunakan SonarCloud untuk mencegah *bug* atau penurunan kualitas masuk ke repositori utama.
 
 Sementara itu, CD juga telah terwujud melalui integrasi antara *branch* `main` dan layanan PaaS, di mana setiap perubahan kode di *branch* utama akan secara otomatis memicu proses *build container* Docker dan meluncurkan pembaruan aplikasi ke server tanpa memerlukan intervensi manual sama sekali.
+
+## SOLID Principles Implementation
+
+**1. Have you implemented SRP?**
+Yes, I have applied the Single Responsibility Principle (SRP). Previously, the `CarController` was placed inside the `ProductController.java` file. I separated them into two different files so that `ProductController` only handles product-related logic, and `CarController` only handles car-related logic. Each class now encapsulates only one aspect of the software's functionality and has only one reason to change.
+
+**2. Have you implemented OCP?**
+Yes, the Open-Closed Principle (OCP) is applied. By injecting the `CarService` interface into the controller rather than its concrete implementation, the system is open for extension but closed for modification. If we need to implement a new car service logic (e.g., fetching data from a real database), we can simply create a new class implementing `CarService` without modifying the `CarController` source code.
+
+**3. Have you implemented LSP?**
+Yes, I applied the Liskov Substitution Principle (LSP). In the previous code, `CarController` used the `extends ProductController` keyword. This violated LSP because a `CarController` cannot perfectly substitute a `ProductController` (they handle different domains entirely). I removed the inheritance, ensuring that class hierarchies are semantically correct.
+
+**4. Have you implemented ISP?**
+Yes, the Interface Segregation Principle (ISP) is applied. The `CarService` interface is focused and specific, containing only the methods (`create`, `findAll`, `findById`, `update`, `deleteCarById`) that the client (`CarController`) actually needs to know and use. It is not bloated with irrelevant methods.
+
+**5. Have you implemented DIP?**
+Yes, I applied the Dependency Inversion Principle (DIP). Previously, the `CarController` depended on a concrete, low-level module: `@Autowired private CarServiceImpl carservice`. I changed this to depend on the high-level abstraction: `@Autowired private CarService carservice`. Now, the controller relies on the abstraction rather than the implementation detail.
