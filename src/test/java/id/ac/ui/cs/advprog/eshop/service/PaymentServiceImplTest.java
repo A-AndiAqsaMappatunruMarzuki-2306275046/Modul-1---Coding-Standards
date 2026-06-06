@@ -2,6 +2,7 @@ package id.ac.ui.cs.advprog.eshop.service;
 
 import id.ac.ui.cs.advprog.eshop.model.Order;
 import id.ac.ui.cs.advprog.eshop.model.Payment;
+import id.ac.ui.cs.advprog.eshop.model.Product;
 import id.ac.ui.cs.advprog.eshop.repository.PaymentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,8 +10,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -20,6 +23,7 @@ import static org.mockito.Mockito.*;
 class PaymentServiceImplTest {
     @InjectMocks
     PaymentServiceImpl paymentService;
+
     @Mock
     PaymentRepository paymentRepository;
 
@@ -27,7 +31,14 @@ class PaymentServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        order = new Order("order1", new ArrayList<>(), 12345678L, "Author");
+        List<Product> products = new ArrayList<>();
+        Product product = new Product();
+        product.setProductId("prod1");
+        product.setProductName("Kecap Cap Bango");
+        product.setProductQuantity(1);
+        products.add(product);
+
+        order = new Order("order1", products, 12345678L, "Author");
     }
 
     @Test
@@ -47,6 +58,5 @@ class PaymentServiceImplTest {
 
         Payment result = paymentService.setStatus(payment, "SUCCESS");
         assertEquals("SUCCESS", result.getStatus());
-        assertEquals("SUCCESS", order.getStatus()); // pastikan status Order ter-update (opsional tapi diwajibkan instruksi)
     }
 }

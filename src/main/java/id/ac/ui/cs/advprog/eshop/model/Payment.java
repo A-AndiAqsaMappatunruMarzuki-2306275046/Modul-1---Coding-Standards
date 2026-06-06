@@ -6,6 +6,9 @@ import java.util.Map;
 
 @Getter
 public class Payment {
+    public static final String STATUS_SUCCESS = "SUCCESS";
+    public static final String STATUS_REJECTED = "REJECTED";
+
     private final String id;
     private final String method;
     private final Map<String, String> paymentData;
@@ -19,11 +22,11 @@ public class Payment {
         this.paymentData = paymentData;
 
         if ("VOUCHER".equals(method)) {
-            this.status = validateVoucher(paymentData.get("voucherCode")) ? "SUCCESS" : "REJECTED";
+            this.status = validateVoucher(paymentData.get("voucherCode")) ? STATUS_SUCCESS : STATUS_REJECTED;
         } else if ("BANK".equals(method)) {
-            this.status = validateBankTransfer(paymentData) ? "SUCCESS" : "REJECTED";
+            this.status = validateBankTransfer(paymentData) ? STATUS_SUCCESS : STATUS_REJECTED;
         } else {
-            this.status = "REJECTED";
+            this.status = STATUS_REJECTED;
         }
     }
 

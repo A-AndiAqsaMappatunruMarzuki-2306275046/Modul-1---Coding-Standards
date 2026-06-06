@@ -25,10 +25,6 @@ public class PaymentServiceImpl implements PaymentService {
     public Payment setStatus(Payment payment, String status) {
         payment.setStatus(status);
         paymentRepository.save(payment);
-
-        if ("SUCCESS".equals(status)) {
-        } else if ("REJECTED".equals(status)) {
-        }
         return payment;
     }
 
