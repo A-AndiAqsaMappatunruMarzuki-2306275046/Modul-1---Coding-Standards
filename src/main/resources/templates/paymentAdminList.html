@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><title>All Payments</title></head>
+<body>
+<h1>Daftar Semua Pembayaran</h1>
+<ul>
+    <li th:each="p : ${payments}">
+        ID: <span th:text="${p.id}"></span> | Status: <span th:text="${p.status}"></span>
+    </li>
+</ul>
+</body>
+</html>

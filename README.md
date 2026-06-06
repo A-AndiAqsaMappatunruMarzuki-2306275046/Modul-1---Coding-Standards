@@ -107,3 +107,24 @@ Applying SOLID principles makes the codebase much easier to maintain, scale, and
 Failing to apply SOLID principles leads to a rigid, fragile, and error-prone system:
 * **Unexpected Bugs & Side Effects (LSP Violation Example):** When `CarController` was extending `ProductController`, it silently inherited all product-related endpoints. This means a user navigating to a car-related path might accidentally trigger a product-related action, causing routing conflicts and potential security flaws.
 * **Testing Difficulties & Tight Coupling (DIP Violation Example):** When `CarController` directly depended on the concrete `CarServiceImpl`, the two classes were tightly coupled. When I tried to run unit tests for the `ProductController`, the application context crashed because it was trying to load the tightly-coupled `CarServiceImpl` dependency that wasn't mocked. This makes isolated unit testing incredibly frustrating and difficult.
+
+
+## Reflection (Module 4)
+
+**1. Reflect based on Percival (2017) proposed self-reflective questions, whether this TDD flow is useful enough for you or not. If not, explain things that you need to do next time you make more tests.**
+
+Based on Percival's self-reflective framework, this Test-Driven Development (TDD) flow has proven to be highly useful for my development process. By strictly following the Red-Green-Refactor cycle, I experienced several benefits:
+* **Confidence in Code:** Writing the failing tests first forced me to deeply understand the requirements and edge cases (e.g., handling invalid order statuses or all-lowercase author names) before writing any actual logic. When the tests finally turned green, I had high confidence that my code behaved exactly as intended.
+* **Better Design:** TDD guided me to write modular and testable code. For instance, testing the `OrderService` required me to use Mockito to isolate the service layer from the repository layer, which naturally enforced the Dependency Inversion Principle.
+* **Room for Improvement:** While useful, one thing I need to improve next time is anticipating more complex "unhappy paths." Currently, the tests cover the explicit edge cases mentioned in the requirements, but in the future, I should proactively think of hidden boundary conditions (e.g., extremely long strings or concurrent modifications) to make the test suite even more robust.
+
+**2. You have created unit tests in Tutorial. Now reflect whether your tests have successfully followed F.I.R.S.T. principle or not. If not, explain things that you need to do the next time you create more tests.**
+
+Yes, the unit tests I created have largely successfully followed the **F.I.R.S.T.** principles:
+* **Fast:** The tests run extremely quickly (in milliseconds) because they don't rely on a real database or external network. We used in-memory lists and Mockito to ensure fast execution.
+* **Independent:** Each test is isolated. I used the `@BeforeEach` annotation to set up a fresh `List<Product>` and `List<Order>` before every single test, ensuring that data mutation in one test does not affect the outcome of another.
+* **Repeatable:** The tests can be run in any environment (my local machine, CI/CD pipeline, etc.) and will yield the exact same results every time because there are no external dependencies.
+* **Self-Validating:** All tests use assertions (e.g., `assertEquals`, `assertThrows`, `assertNull`) to automatically output a pass or fail boolean result. I do not have to manually check logs or print statements to verify the output.
+* **Timely:** The tests were written *before* the production code, perfectly adhering to the TDD methodology.
+
+**What to do next time:** To further improve, I need to ensure that my mock setups in the future remain strictly focused on behavior rather than tightly coupling to implementation details. Sometimes, over-mocking can make tests brittle, so finding the right balance of what to mock will be my focus for the next tests.

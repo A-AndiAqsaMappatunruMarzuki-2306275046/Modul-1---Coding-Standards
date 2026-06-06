@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><title>Admin Action</title></head>
+<body>
+<h1>Validasi Pembayaran <span th:text="${payment?.id}"></span></h1>
+<form th:action="@{'/payment/admin/set-status/' + ${payment?.id}}" method="post">
+    <button name="status" value="SUCCESS">Accept</button>
+    <button name="status" value="REJECTED">Reject</button>
+</form>
+</body>
+</html>

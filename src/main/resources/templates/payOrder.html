@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><title>Pay Order</title></head>
+<body>
+<h1>Bayar Pesanan <span th:text="${orderId}"></span></h1>
+<form th:action="@{'/order/pay/' + ${orderId}}" method="post">
+    <button type="submit">Lanjutkan Pembayaran</button>
+</form>
+</body>
+</html>
