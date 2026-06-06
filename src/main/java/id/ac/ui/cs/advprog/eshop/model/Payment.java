@@ -1,14 +1,17 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
 import lombok.Getter;
+import lombok.Setter;
 import java.util.Map;
 
 @Getter
 public class Payment {
-    String id;
-    String method;
-    String status;
-    Map<String, String> paymentData;
+    private final String id;
+    private final String method;
+    private final Map<String, String> paymentData;
+
+    @Setter
+    private String status;
 
     public Payment(String id, String method, Map<String, String> paymentData) {
         this.id = id;
@@ -16,29 +19,23 @@ public class Payment {
         this.paymentData = paymentData;
 
         if ("VOUCHER".equals(method)) {
-            String code = paymentData.get("voucherCode");
-            if (code != null && code.length() == 16 && code.startsWith("ESHOP")) {
-                long numCount = code.chars().filter(Character::isDigit).count();
-                if (numCount == 8) {
-                    this.status = "SUCCESS";
-                } else {
-                    this.status = "REJECTED";
-                }
-            } else {
-                this.status = "REJECTED";
-            }
+            this.status = validateVoucher(paymentData.get("voucherCode")) ? "SUCCESS" : "REJECTED";
         } else if ("BANK".equals(method)) {
-            String bankName = paymentData.get("bankName");
-            String refCode = paymentData.get("referenceCode");
-            if (bankName != null && !bankName.isEmpty() && refCode != null && !refCode.isEmpty()) {
-                this.status = "SUCCESS";
-            } else {
-                this.status = "REJECTED";
-            }
+            this.status = validateBankTransfer(paymentData) ? "SUCCESS" : "REJECTED";
+        } else {
+            this.status = "REJECTED";
         }
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    private boolean validateVoucher(String code) {
+        if (code == null || code.length() != 16 || !code.startsWith("ESHOP")) return false;
+        long numCount = code.chars().filter(Character::isDigit).count();
+        return numCount == 8;
+    }
+
+    private boolean validateBankTransfer(Map<String, String> data) {
+        String bankName = data.get("bankName");
+        String refCode = data.get("referenceCode");
+        return bankName != null && !bankName.isEmpty() && refCode != null && !refCode.isEmpty();
     }
 }
