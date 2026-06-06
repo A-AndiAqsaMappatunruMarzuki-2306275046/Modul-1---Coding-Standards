@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><title>History Result</title></head>
+<body>
+<h1>History for <span th:text="${author}"></span></h1>
+<ul>
+    <li th:each="order : ${orders}">
+        Order ID: <span th:text="${order.id}"></span> | Status: <span th:text="${order.status}"></span>
+    </li>
+</ul>
+</body>
+</html>
